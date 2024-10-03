@@ -1,0 +1,93 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  flex-direction: column; 
+  gap: 10px; 
+}
+
+.container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center; 
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex; 
+  align-items: center; 
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  margin-right: 10px; 
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 18px;
+  transition: opacity 0.5s ease; 
+  opacity: 0; 
+}
+
+#result.show {
+  opacity: 1; 
+}
+
+.strength-meter {
+  width: 100%;
+  height: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.strength-meter-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  transition: width 0.3s ease;
+}
+
+.weak {
+  background-color: #f44336;
+}
+
+.medium {
+  background-color: #ff9800;
+}
+
+.strong {
+  background-color: #4CAF50;
+}
