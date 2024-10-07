@@ -9,10 +9,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 
 let database = firebase.database()
-
+let emailcontent = `<p>Hi there!</p><p>Thank you for participating in Hacktober and testing your password strength! Here is a recap of your results!<br><br>We gave your password a score of: `
 let onlyNumbers = 0
 let onlyUpper = 0
-let onlyLower = 0
+let onlyLower = 0 
 let noSpecial = 0
 let noNumbers = 0
 let noUpper = 0
@@ -83,13 +83,14 @@ function evaluate(pw) {
     }
 
     document.querySelector('#result-score').innerHTML = `${score}/10`
-
+    emailcontent += `<strong>${score}/10</strong>.</p>`
     if (goodList != null) {
         document.querySelector('#good-append').innerHTML = goodList.replace(undefined, '')
     }
     if (badList != null) {
         document.querySelector('#bad-append').innerHTML = badList.replace(undefined, '')
     }
+    emailcontent += `<p>Here is a detailed list about the good and bad things about your password.</p><br><p style='color:green; font-size: 18px;'><strong><u>Good Things!</u></strong></p>${goodList.replace(undefined, '').replace("class='detailed-lineitem'", '')}<br><p style='color:red; font-size: 18px;'><strong><u>Things That Need Some Work...</u></strong></p>${badList.replace(undefined, '').replace("class='detailed-lineitem'", '')}`
 }
 
 document.querySelector('#clear').addEventListener('click', () => {
@@ -130,5 +131,36 @@ document.querySelector('#submit').addEventListener('click', async () => {
         console.log('display-result')
         document.querySelector('#loading-bounce').style.display = 'none'
         document.querySelector('#result-final').style.display = 'block'
-    }, 1)
+        document.querySelector('#emailwrap').style.display = 'flex'
+    }, 1) // REMOVE TIMEOUT 
+}) 
+let email
+
+document.querySelector('#emailwrap').addEventListener('click', () => {
+    emailcontent += `<br><p><strong><u>Remember:</u></strong> Hackers use sophisticated tools to crack weak passwords in seconds. A strong, unique password for each of your accounts is your first line of defense.</p><br><p style='color:orange;'>Spookily Yours! 🐈‍⬛</p><p>- The 2024 Hacktober Team</p>`
+    console.log('emailprompt')
+    email = prompt('What is your email?')
+    let send = confirm(`Ok, we will send an email to ${email}. If this is INCORRECT, please click cancel. Otherwise, click OK.`)
+    if (send) {
+        
+        console.log('sendemail')
+        const data = new FormData()
+        data.set('sendto', email)
+        data.set('subject', 'Your Password Strength Results!')
+        data.set('content', `Sorry, this email didn't send correctly. You can delete this email, or keep it. We won't mind either way!`)
+        data.set('html', emailcontent)
+        fetch('https://emailserver.prestonkwei.com/email', {
+            method: 'post',
+            body: data,
+        }).catch(() => {})
+    }
 })
+// await database.ref(`data/`).update({
+//     onlyNumbers: 0,
+//     onlyUpper: 0,
+//     onlyLower: 0,
+//     noSpecial: 0,
+//     noNumbers: 0,
+//     noUpper: 0,
+//     noLower: 0,
+// })
