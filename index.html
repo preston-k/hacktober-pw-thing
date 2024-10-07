@@ -10,10 +10,55 @@
         <h1>Password Strength Checker</h1>
         <div class='input-group'>
             <input type='password' id='password' placeholder='Enter your password'>
-            <button id='clearBtn'>Clear</button>
+            <button id='clear'>Clear</button>
         </div>
-        <div id='result'></div>
+        <button id='submit'>Submit</button>
     </div>
-    <script src='script.js'></script>
+
+    <div id='result'>
+        <div id='loading-bounce'>
+            <div class='loader'></div>
+            <p id='loading-fact'></p>
+        </div>
+        <div id='result-final'>
+            <h3 id='result-top-h3'>We give your password a score of...</h3>
+            <p id='result-score'></p>
+            <div id='result-scorebar'>
+                <div class='result-minibar' id='result-1'></div>
+                <div class='result-minibar' id='result-2'></div>
+                <div class='result-minibar' id='result-3'></div>
+                <div class='result-minibar' id='result-4'></div>
+                <div class='result-minibar' id='result-5'></div>
+                <div class='result-minibar' id='result-6'></div>
+                <div class='result-minibar' id='result-7'></div>
+                <div class='result-minibar' id='result-8'></div>
+                <div class='result-minibar' id='result-9'></div>
+                <div class='result-minibar' id='result-10'></div>
+            </div>
+            <div id='detailed'>
+                <div id='dt-good' class='detailed-side'>
+                    <p class='dt-sidetitle'>Things That Are Good!</p>
+                    <div id='good-append'></div>
+                </div>
+                <div id='dt-bad' class='detailed-side'>
+                    <p class='dt-sidetitle'>Things That Need Some Work</p>
+                    <div id='bad-append'></div>
+                </div>
+            </div>
+            <div id='restart'>
+                <a href='/'><button id='bts'>Restart</button></a>
+                <p id='restart-bottom'>Restarting clears your password from the textbox, and restarts the interative page.</p>
+            </div>
+            
+        </div>
+    </div>
+    <div id='bottom'>
+        <p>Don't worry, your information is secure. Your password is never sent anywhere.</p>
+    </div>
+    <p id='tos-privacy'><a href='https://legal.prestonkwei.com/policies/tos'>Terms of Service</a> ⋅ <a href='https://legal.prestonkwei.com/policies/tos'>Privacy Policy</a></p>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js'></script>
+    <script src='https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js'></script>
+    <script src='https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js'></script>
+    <script src='script.js' type='module'></script>
 </body>
 </html>

@@ -1,86 +1,123 @@
-const passwordInput = document.getElementById('password');
-const resultDiv = document.getElementById('result');
-const clearBtn = document.getElementById('clearBtn');
+const firebaseConfig = {
+    apiKey: "AIzaSyDN4kyU0EmXc8-yJNfojZ6zdHukk7u1Quw",
+    authDomain: "collegeprephacktober.firebaseapp.com",
+    projectId: "collegeprephacktober",
+    storageBucket: "collegeprephacktober.appspot.com",
+    messagingSenderId: "139266798506",
+    appId: "1:139266798506:web:34bc54d324fd35580831d3"
+}
+firebase.initializeApp(firebaseConfig)
 
-passwordInput.addEventListener('input', function() {
-    const password = passwordInput.value;
-    const strength = calculatePasswordStrength(password);
-    displayResult(strength);
-});
-
-clearBtn.addEventListener('click', function() {
-    passwordInput.value = '';
-    resultDiv.innerHTML = '';
-    resultDiv.classList.remove('show'); 
-});
-
-function calculatePasswordStrength(password) {
-    let score = 0;
-    score += password.length * 4;
-    score += (password.match(/[a-z]/g) || []).length * 2;
-    score += (password.match(/[A-Z]/g) || []).length * 2;
-    score += (password.match(/[0-9]/g) || []).length * 3;
-    score += (password.match(/[^a-zA-Z0-9]/g) || []).length * 5;
-    if (password.match(/^[a-zA-Z]+$/)) {
-        score -= password.length;
-    }
-    if (password.match(/^[0-9]+$/)) {
-        score -= password.length;
-    }
-
-    let crackingTime = 'Instant';
-    let metric = '';
-    if (score < 30) {
-        crackingTime = 'Instant';
-        metric = ' (less than a second)';
-    } else if (score < 50) {
-        crackingTime = 'Seconds';
-        metric = ' (e.g., 10 seconds)';
-    } else if (score < 60) {
-        crackingTime = 'Minutes';
-        metric = ' (e.g., 10,000 seconds is about 3 hours)';
-    } else if (score < 70) {
-        crackingTime = 'Hours';
-        metric = ' (e.g., 80,000 seconds is about 22 hours)';
-    } else if (score < 80) {
-        crackingTime = 'Days';
-        metric = ' (e.g., 700,000 seconds is about 8 days)';
-    } else if (score < 90) {
-        crackingTime = 'Weeks';
-        metric = ' (e.g., 3,000,000 seconds is about 5 weeks)';
-    } else if (score < 100) {
-        crackingTime = 'Months';
-        metric = ' (e.g., 10,000,000 seconds is about 4 months)';
+let database = firebase.database()
+let onlyNumbers = 0
+let onlyUpper = 0
+let onlyLower = 0
+let noSpecial = 0
+let noNumbers = 0
+let noUpper = 0
+let noLower = 0
+let goodList
+let badList
+function evaluate(pw) {
+    let score = 0
+    let specialChars = /[!@#$%^&*(),.?":{}|<>]/
+    let hasUppercase = /[A-Z]/
+    let hasLowercase = /[a-z]/
+    let hasNumbers = /[0-9]/
+    
+    let specialCount = (pw.match(specialChars) || []).length
+    let uppercaseCount = (pw.match(hasUppercase) || []).length
+    let lowercaseCount = (pw.match(hasLowercase) || []).length
+    let numberCount = (pw.match(hasNumbers) || []).length
+    if (pw.length >= 8) score += 2
+    else if (pw.length >= 5) score += 1
+    if (uppercaseCount > 0) score += 2
+    if (lowercaseCount > 0) score += 2
+    if (numberCount > 0) score += 2
+    if (specialCount > 0) score += 3
+    let characteristics = []
+    if (specialCount === 0) {
+        badList += "<p class='detailed-lineitem'>Your password doesn't contain any special characters.</p>"
     } else {
-        crackingTime = 'Years';
-        metric = ' (e.g., 300,000,000 seconds is about 10 years)';
+        goodList += "<p class='detailed-lineitem'>Your password contains one or more special characters.</p>"
     }
-
-    return {
-        score: score,
-        strength: getStrengthLevel(score),
-        crackingTime: crackingTime,
-        metric: metric
-    };
-}
-
-function getStrengthLevel(score) {
-    if (score < 50) {
-        return 'Weak';
-    } else if (score < 80) {
-        return 'Medium';
+    if (numberCount === 0) {
+        badList += "<p class='detailed-lineitem'>Your password doesn't contain any numbers.</p>"
     } else {
-        return 'Strong';
+        goodList += "<p class='detailed-lineitem'>Your password contains one or more numbers.</p>"
     }
+    if (uppercaseCount === 0) {
+        badList += "<p class='detailed-lineitem'>Your password doesn't contain any uppercase letters.</p>"
+    } else {
+        goodList += "<p class='detailed-lineitem'>Your password contains one or more uppercase letters.</p>"
+    }
+    if (lowercaseCount === 0) {
+        badList += "<p class='detailed-lineitem'>Your password doesn't contain any lowercase letters.</p>"
+    } else {
+        goodList += "<p class='detailed-lineitem'>Your password contains one or more lowercase letters.</p>"
+    }
+    let guessTime
+    if (score >= 10) {
+        score=10
+    }
+
+    if (score <= 3) guessTime = 'Instantly'
+        else if (score <= 5) guessTime = 'Within seconds'
+        else if (score <= 7) guessTime = 'Minutes'
+        else if (score <= 9) guessTime = 'Hours'
+        else guessTime = 'Several days or more'
+        console.log(`Password Strength Score: ${score}/10`)
+        let color = ''
+        if (score >= 7 && score <= 10) {
+            color = '#45a049'
+        } else if (score > 3 && score < 7) {
+            color = '#FFC300'
+        } else {
+            color = '#E63946'
+        }
+        for (let i = 1; i <= score; i++) {
+            document.querySelector(`#result-${i}`).style.backgroundColor = color
+        }
+        document.querySelector('#result-score').innerHTML = `${score}/10`
+        console.log(`Estimated Time to Crack: ${guessTime}`)
+        console.log(`Special Characteristics: ${characteristics.length > 0 ? characteristics.join(', ') : 'None'}`)
+        if (goodList != null) {
+            document.querySelector('#good-append').innerHTML = goodList.replace(undefined, '')
+        }
+        if (badList != null) {
+            document.querySelector('#bad-append').innerHTML = badList.replace(undefined, '')
+        }
 }
 
-function displayResult(strength) {
-    resultDiv.innerHTML = `
-        <p>Strength: <span class='${strength.strength.toLowerCase()}'>${strength.strength}</span></p>
-        <p>Cracking Time: ${strength.crackingTime}${strength.metric}</p>
-        <div class='strength-meter'>
-            <div class='strength-meter-fill ${strength.strength.toLowerCase()}' style='width: ${strength.score}%'></div>
-        </div>
-    `;
-    resultDiv.classList.add('show'); 
-}
+
+document.querySelector('#clear').addEventListener('click', () => {
+    console.log('clear')
+    document.querySelector('#password').value = ''
+})
+let facts = ['Hackers can crack passwords under 8 characters in seconds.','The password "P@$$wOrd!" is weaker than "CorrectHorseBatteryStaple"', '"123456" and "password" are some of the most common passwords.']
+let chosenfact = facts[Math.floor(Math.random() * facts.length)]
+console.log(chosenfact)
+
+let id = self.crypto.randomUUID()
+document.querySelector('#loading-fact').innerHTML = chosenfact
+document.querySelector('#submit').addEventListener('click', async () => {
+    console.log('submit')
+    console.log(document.querySelector('#password').value)
+    document.querySelector('#result').style.display = 'flex'
+
+    evaluate(document.querySelector('#password').value)
+    await database.ref(`submissions/${id}/`).update({
+        onlyNumbers: onlyNumbers,
+        onlyUpper: onlyUpper,
+        onlyLower: onlyLower,
+        noSpecial: noSpecial,
+        noNumbers: noNumbers,
+        noUpper: noUpper,
+        noLower: noLower
+    })
+    setTimeout(() => {
+        console.log('display-result')
+        document.querySelector('#loading-bounce').style.display = 'none'
+        document.querySelector('#result-final').style.display = 'block'
+    }, 1)
+})
