@@ -9,6 +9,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 
 let database = firebase.database()
+
 let onlyNumbers = 0
 let onlyUpper = 0
 let onlyLower = 0
@@ -16,8 +17,13 @@ let noSpecial = 0
 let noNumbers = 0
 let noUpper = 0
 let noLower = 0
-let goodList
-let badList
+let current
+await database.ref('data/').once('value').then((snapshot) => {
+    console.log(snapshot.val())
+    current = snapshot.val()
+})
+let goodList = ''
+let badList = ''
 function evaluate(pw) {
     let score = 0
     let specialChars = /[!@#$%^&*(),.?":{}|<>]/
@@ -29,66 +35,62 @@ function evaluate(pw) {
     let uppercaseCount = (pw.match(hasUppercase) || []).length
     let lowercaseCount = (pw.match(hasLowercase) || []).length
     let numberCount = (pw.match(hasNumbers) || []).length
+    
     if (pw.length >= 8) score += 2
     else if (pw.length >= 5) score += 1
     if (uppercaseCount > 0) score += 2
     if (lowercaseCount > 0) score += 2
     if (numberCount > 0) score += 2
     if (specialCount > 0) score += 3
-    let characteristics = []
-    if (specialCount === 0) {
-        badList += "<p class='detailed-lineitem'>Your password doesn't contain any special characters.</p>"
-    } else {
-        goodList += "<p class='detailed-lineitem'>Your password contains one or more special characters.</p>"
-    }
-    if (numberCount === 0) {
-        badList += "<p class='detailed-lineitem'>Your password doesn't contain any numbers.</p>"
-    } else {
-        goodList += "<p class='detailed-lineitem'>Your password contains one or more numbers.</p>"
-    }
-    if (uppercaseCount === 0) {
-        badList += "<p class='detailed-lineitem'>Your password doesn't contain any uppercase letters.</p>"
-    } else {
-        goodList += "<p class='detailed-lineitem'>Your password contains one or more uppercase letters.</p>"
-    }
-    if (lowercaseCount === 0) {
-        badList += "<p class='detailed-lineitem'>Your password doesn't contain any lowercase letters.</p>"
-    } else {
-        goodList += "<p class='detailed-lineitem'>Your password contains one or more lowercase letters.</p>"
-    }
+    // add to variables
+    if (specialCount == 0) noSpecial=1
+    if (numberCount == 0) noNumbers=1
+    if (numberCount != 0 && uppercaseCount == 0 && lowercaseCount == 0) onlyNumbers = 1
+    if (numberCount == 0 && uppercaseCount != 0 && lowercaseCount == 0) onlyUpper = 1
+    if (numberCount == 0 && uppercaseCount == 0 && lowercaseCount != 0) onlyLower = 1
+    if (uppercaseCount == 0) noUpper=1
+    if (lowercaseCount == 0) noLower=1
+
+    // 
+    if (specialCount === 0) badList += "<p class='detailed-lineitem'>Your password doesn't contain any special characters.</p>"
+    else goodList += "<p class='detailed-lineitem'>Your password contains one or more special characters.</p>"
+    
+    if (numberCount === 0) badList += "<p class='detailed-lineitem'>Your password doesn't contain any numbers.</p>"
+    else goodList += "<p class='detailed-lineitem'>Your password contains one or more numbers.</p>"
+    
+    if (uppercaseCount === 0) badList += "<p class='detailed-lineitem'>Your password doesn't contain any uppercase letters.</p>"
+    else goodList += "<p class='detailed-lineitem'>Your password contains one or more uppercase letters.</p>"
+    
+    if (lowercaseCount === 0) badList += "<p class='detailed-lineitem'>Your password doesn't contain any lowercase letters.</p>"
+    else goodList += "<p class='detailed-lineitem'>Your password contains one or more lowercase letters.</p>"
+    
     let guessTime
-    if (score >= 10) {
-        score=10
-    }
+    if (score >= 10) score = 10
 
     if (score <= 3) guessTime = 'Instantly'
-        else if (score <= 5) guessTime = 'Within seconds'
-        else if (score <= 7) guessTime = 'Minutes'
-        else if (score <= 9) guessTime = 'Hours'
-        else guessTime = 'Several days or more'
-        console.log(`Password Strength Score: ${score}/10`)
-        let color = ''
-        if (score >= 7 && score <= 10) {
-            color = '#45a049'
-        } else if (score > 3 && score < 7) {
-            color = '#FFC300'
-        } else {
-            color = '#E63946'
-        }
-        for (let i = 1; i <= score; i++) {
-            document.querySelector(`#result-${i}`).style.backgroundColor = color
-        }
-        document.querySelector('#result-score').innerHTML = `${score}/10`
-        console.log(`Estimated Time to Crack: ${guessTime}`)
-        console.log(`Special Characteristics: ${characteristics.length > 0 ? characteristics.join(', ') : 'None'}`)
-        if (goodList != null) {
-            document.querySelector('#good-append').innerHTML = goodList.replace(undefined, '')
-        }
-        if (badList != null) {
-            document.querySelector('#bad-append').innerHTML = badList.replace(undefined, '')
-        }
-}
+    else if (score <= 5) guessTime = 'Within seconds'
+    else if (score <= 7) guessTime = 'Minutes'
+    else if (score <= 9) guessTime = 'Hours'
+    else guessTime = 'Several days or more'
 
+    let color = ''
+    if (score >= 7 && score <= 10) color = '#45a049'
+    else if (score > 3 && score < 7) color = '#FFC300'
+    else color = '#E63946'
+
+    for (let i = 1; i <= score; i++) {
+        document.querySelector(`#result-${i}`).style.backgroundColor = color
+    }
+
+    document.querySelector('#result-score').innerHTML = `${score}/10`
+
+    if (goodList != null) {
+        document.querySelector('#good-append').innerHTML = goodList.replace(undefined, '')
+    }
+    if (badList != null) {
+        document.querySelector('#bad-append').innerHTML = badList.replace(undefined, '')
+    }
+}
 
 document.querySelector('#clear').addEventListener('click', () => {
     console.log('clear')
@@ -114,6 +116,15 @@ document.querySelector('#submit').addEventListener('click', async () => {
         noNumbers: noNumbers,
         noUpper: noUpper,
         noLower: noLower
+    })
+    await database.ref(`data/`).update({
+        onlyNumbers: current['onlyNumbers']+onlyNumbers,
+        onlyUpper: current['onlyUpper']+onlyUpper,
+        onlyLower: current['onlyLower']+onlyLower,
+        noSpecial: current['noSpecial']+noSpecial,
+        noNumbers: current['noNumbers']+noNumbers,
+        noUpper: current['noUpper']+noUpper,
+        noLower: current['noLower']+noLower
     })
     setTimeout(() => {
         console.log('display-result')
