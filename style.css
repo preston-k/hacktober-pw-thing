@@ -226,7 +226,7 @@ a {
 #emailwrap {
   width: 100px;
   height: 100px;
-  background-color: #FF6600;
+  background-color: #ffb20f;
   position: fixed;
   top: 10px;
   right: 10px;
@@ -241,4 +241,8 @@ a {
 }
 #email-icon {
   width: 75px;
+}
+#bottom {
+  color: white;
+  font-size: 12px;
 }
