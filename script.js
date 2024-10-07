@@ -133,7 +133,7 @@ document.querySelector('#submit').addEventListener('click', async () => {
         document.querySelector('#loading-bounce').style.display = 'none'
         document.querySelector('#result-final').style.display = 'block'
         document.querySelector('#emailwrap').style.display = 'flex'
-    }, 5000) // REMOVE TIMEOUT 
+    }, 5000) // 5 second bounce to allow time to read
 }) 
 let email
 
