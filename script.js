@@ -117,7 +117,7 @@ document.querySelector('#submit').addEventListener('click', async () => {
         noNumbers: noNumbers,
         noUpper: noUpper,
         noLower: noLower,
-        score: score
+        // score: score
     })
     await database.ref(`data/`).update({
         onlyNumbers: current['onlyNumbers']+onlyNumbers,
