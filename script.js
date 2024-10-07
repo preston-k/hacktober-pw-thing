@@ -97,7 +97,7 @@ document.querySelector('#clear').addEventListener('click', () => {
     console.log('clear')
     document.querySelector('#password').value = ''
 })
-let facts = ['Hackers can crack passwords under 8 characters in seconds.','The password "P@$$wOrd!" is weaker than "CorrectHorseBatteryStaple"', '"123456" and "password" are some of the most common passwords.']
+let facts = ['Hackers can crack passwords under 8 characters in seconds.','The password "P@$$wOrd!" is weaker than "CorrectHorseBatteryStaple"', '"123456" and "password" are some of the most common passwords.','Over 80% of data breaches are caused by weak or stolen passwords.']
 let chosenfact = facts[Math.floor(Math.random() * facts.length)]
 console.log(chosenfact)
 
@@ -132,7 +132,7 @@ document.querySelector('#submit').addEventListener('click', async () => {
         document.querySelector('#loading-bounce').style.display = 'none'
         document.querySelector('#result-final').style.display = 'block'
         document.querySelector('#emailwrap').style.display = 'flex'
-    }, 1) // REMOVE TIMEOUT 
+    }, 5000) // REMOVE TIMEOUT 
 }) 
 let email
 
