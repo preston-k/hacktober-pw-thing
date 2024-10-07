@@ -97,7 +97,7 @@ document.querySelector('#clear').addEventListener('click', () => {
     console.log('clear')
     document.querySelector('#password').value = ''
 })
-let facts = ['Hackers can crack passwords under 8 characters in seconds.','The password "P@$$wOrd!" is weaker than "CorrectHorseBatteryStaple"', '"123456" and "password" are some of the most common passwords.','Over 80% of data breaches are caused by weak or stolen passwords.']
+let facts = ['Hackers can crack passwords under 8 characters in seconds.','The password "P@$$wOrd!" is weaker than "CorrectHorseBatteryStaple"', '"123456" and "password" are some of the most common passwords.','Over 80% of data breaches are caused by weak or stolen passwords.','Some websites intentionally limit password complexity to avoid frustrating users.','The websites you use might have a password length limit.']
 let chosenfact = facts[Math.floor(Math.random() * facts.length)]
 console.log(chosenfact)
 
