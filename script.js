@@ -133,7 +133,7 @@ document.querySelector('#submit').addEventListener('click', async () => {
         document.querySelector('#loading-bounce').style.display = 'none'
         document.querySelector('#result-final').style.display = 'block'
         document.querySelector('#emailwrap').style.display = 'flex'
-    }, 5000) // 5 second bounce to allow time to read
+    }, 3000) // 3 second bounce to allow time to read
 }) 
 let email
 
@@ -146,6 +146,7 @@ document.querySelector('#emailwrap').addEventListener('click', () => {
         
         console.log('sendemail')
         const data = new FormData()
+        data.set('from', 'pkwei@college-prep.org')
         data.set('sendto', email)
         data.set('subject', 'Your Password Strength Results!')
         data.set('content', `Sorry, this email didn't send correctly. You can delete this email, or keep it. We won't mind either way!`)
