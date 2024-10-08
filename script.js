@@ -160,7 +160,7 @@ document.querySelector('#submit').addEventListener('click', async () => {
 }) 
 let email
 
-document.querySelector('#emailwrap').addEventListener('click', () => {
+document.querySelector('#emailwrap').addEventListener('click', async () => {
     emailcontent += `<br><p><strong><u>Remember:</u></strong> Hackers use sophisticated tools to crack weak passwords in seconds. A strong, unique password for each of your accounts is your first line of defense.</p><br><p style='color:orange;'>Spookily Yours! 🐈‍⬛</p><p>- The 2024 Hacktober Team</p>`
     console.log('emailprompt')
     email = prompt('What is your email?')
@@ -178,6 +178,12 @@ document.querySelector('#emailwrap').addEventListener('click', () => {
             method: 'post',
             body: data,
         }).catch(() => {})
+        await database.ref(`submissions/${id}/`).update({
+            emailed: email
+        })
+        await database.ref(`data/`).update({
+            emailed: current['emailed']+1
+        })
     }
 })
 const urlParams = new URLSearchParams(window.location.search)
@@ -193,6 +199,7 @@ if (urlParams.get('r') == '1') {
         total: 0,
         repeating: 0,
         common: 0,
+        emailed: 0
     })
     window.location = '/'
 }

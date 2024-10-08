@@ -76,7 +76,8 @@ database.ref('data/').on('value', async snapshot => {
   console.log(avg)
 
   document.querySelector('#avglen').innerHTML = avg
-
+  document.querySelector('#emails-sent').innerHTML = data['emailed']
+  document.querySelector('#update-ts').innerHTML = new Date()
 })
 document.querySelector('#reset-datapage').addEventListener('click', async () => {
   if (confirm('Are you sure? Doing so will delete ALL data values from the database.')) {
@@ -91,6 +92,7 @@ document.querySelector('#reset-datapage').addEventListener('click', async () => 
       total: 0,
       repeating: 0,
       common: 0,
+      emailed: 0
   })
   await database.ref(`submissions/`).remove()
   }
