@@ -86,7 +86,7 @@ database.ref('data/').on('value', async snapshot => {
   let avgLen = totalLength / lengthcount
   console.log(avgLen)
   document.querySelector('#avglen').innerHTML = avgLen
-  document.querySelector('#avgscore').innerHTML = avgScore
+  document.querySelector('#avgscore').innerHTML = avgScore + '/10'
   document.querySelector('#sessions').innerHTML = data['sessions']
   document.querySelector('#emails-sent').innerHTML = data['emailed']
   document.querySelector('#update-ts').innerHTML = new Date()

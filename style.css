@@ -299,6 +299,7 @@ tr:nth-child(odd) {
 }
 #data-wrap-header {
   margin-top: 0;
+  margin-bottom: 5px;
 }
 #emails-sent, #avglen, #update-ts, #avgscore {
   border: 2px solid black;
