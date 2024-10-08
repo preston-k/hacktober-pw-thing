@@ -124,6 +124,11 @@ document.querySelector('#submit').addEventListener('click', async () => {
 
     evaluate(document.querySelector('#password').value)
     await database.ref(`submissions/${id}/`).update({
+        score: score,
+        ts: new Date(),
+        length: document.querySelector('#password').value.length
+    })
+    await database.ref(`submissions/${id}/details`).update({
         onlyNumbers: onlyNumbers,
         onlyUpper: onlyUpper,
         onlyLower: onlyLower,
@@ -133,8 +138,6 @@ document.querySelector('#submit').addEventListener('click', async () => {
         noLower: noLower,
         repeating: repeating,
         common: common,
-        score: score,
-        ts: new Date()
     })
     await database.ref(`data/`).update({
         total: current['total']+1,

@@ -34,7 +34,7 @@ let myChart = new Chart(ctx, {
   }
 })
 
-database.ref('data/').on('value', snapshot => {
+database.ref('data/').on('value', async snapshot => {
   let data = snapshot.val()
   document.querySelector('#data-total').innerHTML = data['total']
   document.querySelector('#data-nolower').innerHTML = data['noLower']
@@ -61,6 +61,22 @@ database.ref('data/').on('value', snapshot => {
   ]
 
   myChart.update()
+
+  let totalLength = 0
+  let lengthcount = 0
+  let lenSnapshot = await database.ref('/submissions/').once('value')
+  lenSnapshot.forEach(uuidSnapshot => {
+    let lengthValue = uuidSnapshot.child('length/').val()
+    if (lengthValue !== null) {
+      totalLength += lengthValue
+      lengthcount += 1
+    }
+  })
+  let avg = totalLength / lengthcount
+  console.log(avg)
+
+  document.querySelector('#avglen').innerHTML = avg
+
 })
 document.querySelector('#reset-datapage').addEventListener('click', async () => {
   if (confirm('Are you sure? Doing so will delete ALL data values from the database.')) {
