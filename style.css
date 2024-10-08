@@ -247,3 +247,56 @@ a {
   color: white;
   font-size: 12px;
 }
+#data-wrapper {
+  overflow-y: scroll;
+  padding: 30px;
+  width: 90vw;
+  height: 90vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+}
+#data-topwrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#data-table {
+  /* border: 2px solid black; */
+  border-collapse: collapse;
+  width: 50%;
+}
+th {
+  background-color: lightgrey;
+  border: 2px solid black !important;
+}
+td, th {
+  /* border: 1px solid black; */
+  text-align: center;
+  padding: 8px;
+  width: 25%;
+}
+
+tr:nth-child(odd) {
+  background-color: #dddddd;
+}
+.data-table-bg-ye {
+  background-color: rgb(255,255,0,.5) !important;
+}
+.bold-datatitle {
+  font-weight: 800;
+  text-align: right;
+}
+#chart-wrapper {
+  width: 70%;
+  height: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#data-wrap-header {
+  margin-top: 0;
+}

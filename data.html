@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>Data Viewer</title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins'/>
+  <link rel='icon' href='https://cdn.prestonkwei.com/personalwebsitefavicon.png'>
+  <link href='style.css' rel='stylesheet' type='text/css' />
+  <link rel='stylesheet' href='https://cdn.prestonkwei.com/basecode/basecss.css'>
+  <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+</head>
+<body>
+  <div id='data-wrapper'>
+
+    <h1 id='data-wrap-header'>Password Strength Data</h1>
+    <div id='data-topwrap'>
+      <table id='data-table'>
+        <tr>
+          <th>Metric</th>
+          <th>Amount</th>
+          <th>Metric</th>
+          <th>Amount</th>
+        </tr>
+        <tr>
+          <td class='data-table-bg-ye bold-datatitle'>total</td>
+          <td class='data-table-bg-ye' id='data-total'></td>
+          <td class='bold-datatitle'>common</td>
+          <td id='data-common'></td>
+        </tr>
+        <tr>
+          <td class='bold-datatitle'>noLower</td>
+          <td id='data-nolower'></td>
+          <td class='bold-datatitle'>noUpper</td>
+          <td id='data-noupper'></td>
+        </tr>
+        <tr>
+          <td class='bold-datatitle'>noSpecial</td>
+          <td id='data-nospecial'></td>
+          <td class='bold-datatitle'>noNumbers</td>
+          <td id='data-nonumbers'></td>
+        </tr>
+        <tr>
+          <td class='bold-datatitle'>onlyNumbers</td>
+          <td id='data-onlynumbers'></td>
+          <td class='bold-datatitle'>onlyUpper</td>
+          <td id='data-onlyupper'></td>
+        </tr>
+        <tr>
+          <td class='bold-datatitle'>onlyLower</td>
+          <td id='data-onlylower'></td>
+          <td class='bold-datatitle'>repeating</td>
+          <td id='data-repeating'></td>
+        </tr>
+      </table>
+    </div>
+    <div id='chart-wrapper'>
+      <canvas id='chart' width='400' height='200'></canvas>
+    </div>
+    <button id='reset-datapage'>Reset All Data</button>
+  </div>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js'></script>
+  <script src='https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js'></script>
+  <script src='https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js'></script>
+  <script src='https://kit.fontawesome.com/c947e2382a.js' crossorigin='anonymous'></script>
+  <script src='data.js' type='module'></script>
+</head>
+</body>
+</html>
