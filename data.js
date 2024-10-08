@@ -92,5 +92,6 @@ document.querySelector('#reset-datapage').addEventListener('click', async () => 
       repeating: 0,
       common: 0,
   })
+  await database.ref(`submissions/`).remove()
   }
 })
