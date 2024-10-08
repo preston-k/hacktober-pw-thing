@@ -300,7 +300,7 @@ tr:nth-child(odd) {
 #data-wrap-header {
   margin-top: 0;
 }
-#emails-sent, #avglen, #update-ts{
+#emails-sent, #avglen, #update-ts, #avgscore {
   border: 2px solid black;
   padding-left: 5px;
   padding-right: 5px;

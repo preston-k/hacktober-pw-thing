@@ -61,7 +61,18 @@ database.ref('data/').on('value', async snapshot => {
   ]
 
   myChart.update()
-
+  let totalScore = 0
+  let scorecount = 0
+  let scoreSnapshot = await database.ref('/submissions/').once('value')
+  scoreSnapshot.forEach(uuidSnapshot => {
+    let scoreValue = uuidSnapshot.child('score/').val()
+    if (scoreValue !== null) {
+      totalScore += scoreValue
+      scorecount += 1
+    }
+  })
+  let avgScore = totalScore / scorecount
+  console.log(avgScore)
   let totalLength = 0
   let lengthcount = 0
   let lenSnapshot = await database.ref('/submissions/').once('value')
@@ -72,10 +83,10 @@ database.ref('data/').on('value', async snapshot => {
       lengthcount += 1
     }
   })
-  let avg = totalLength / lengthcount
-  console.log(avg)
-
-  document.querySelector('#avglen').innerHTML = avg
+  let avgLen = totalLength / lengthcount
+  console.log(avgLen)
+  document.querySelector('#avglen').innerHTML = avgLen
+  document.querySelector('#avgscore').innerHTML = avgScore
   document.querySelector('#emails-sent').innerHTML = data['emailed']
   document.querySelector('#update-ts').innerHTML = new Date()
 })
