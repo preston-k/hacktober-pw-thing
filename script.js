@@ -17,7 +17,11 @@ let noSpecial = 0
 let noNumbers = 0
 let noUpper = 0
 let noLower = 0
+let repeating = 0
+let common = 0
 let current
+
+let score = 0
 await database.ref('data/').once('value').then((snapshot) => {
     console.log(snapshot.val())
     current = snapshot.val()
@@ -25,7 +29,6 @@ await database.ref('data/').once('value').then((snapshot) => {
 let goodList = ''
 let badList = ''
 function evaluate(pw) {
-    let score = 0
     let specialChars = /[!@#$%^&*(),.?":{}|<>]/
     let hasUppercase = /[A-Z]/
     let hasLowercase = /[a-z]/
@@ -50,7 +53,17 @@ function evaluate(pw) {
     if (numberCount == 0 && uppercaseCount == 0 && lowercaseCount != 0) onlyLower = 1
     if (uppercaseCount == 0) noUpper=1
     if (lowercaseCount == 0) noLower=1
-
+    const badPasswords = ['password', '123456', 'qwerty', 'letmein', 'admin', '123456789', '12345']
+    if (badPasswords.includes(pw.toLowerCase())) {
+        score -= 2
+        badList += "<p class='detailed-lineitem'>Your password is a very common password.</p>"
+        common =1
+    }
+    if (pw.match(/^(.)\1+$/)) { 
+        score -= 5
+        badList += "<p class='detailed-lineitem'>Your password uses only repeating characters.</p>"
+        repeating =1
+    }
     // 
     if (specialCount === 0) badList += "<p class='detailed-lineitem'>Your password doesn't contain any special characters.</p>"
     else goodList += "<p class='detailed-lineitem'>Your password contains one or more special characters.</p>"
@@ -66,6 +79,7 @@ function evaluate(pw) {
     
     let guessTime
     if (score >= 10) score = 10
+    if (score <= 0) score = 0
 
     if (score <= 3) guessTime = 'Instantly'
     else if (score <= 5) guessTime = 'Within seconds'
@@ -105,7 +119,7 @@ let id = self.crypto.randomUUID()
 document.querySelector('#loading-fact').innerHTML = chosenfact
 document.querySelector('#submit').addEventListener('click', async () => {
     console.log('submit')
-    console.log(document.querySelector('#password').value)
+    // console.log(document.querySelector('#password').value)
     document.querySelector('#result').style.display = 'flex'
 
     evaluate(document.querySelector('#password').value)
@@ -117,16 +131,22 @@ document.querySelector('#submit').addEventListener('click', async () => {
         noNumbers: noNumbers,
         noUpper: noUpper,
         noLower: noLower,
-        // score: score
+        repeating: repeating,
+        common: common,
+        score: score,
+        ts: new Date()
     })
     await database.ref(`data/`).update({
+        total: current['total']+1,
         onlyNumbers: current['onlyNumbers']+onlyNumbers,
         onlyUpper: current['onlyUpper']+onlyUpper,
         onlyLower: current['onlyLower']+onlyLower,
         noSpecial: current['noSpecial']+noSpecial,
         noNumbers: current['noNumbers']+noNumbers,
         noUpper: current['noUpper']+noUpper,
-        noLower: current['noLower']+noLower
+        noLower: current['noLower']+noLower,
+        repeating: current['repeating']+repeating,
+        common: current['common']+common,
     })
     setTimeout(() => {
         console.log('display-result')
@@ -157,12 +177,19 @@ document.querySelector('#emailwrap').addEventListener('click', () => {
         }).catch(() => {})
     }
 })
-// await database.ref(`data/`).update({
-//     onlyNumbers: 0,
-//     onlyUpper: 0,
-//     onlyLower: 0,
-//     noSpecial: 0,
-//     noNumbers: 0,
-//     noUpper: 0,
-//     noLower: 0,
-// })
+const urlParams = new URLSearchParams(window.location.search)
+if (urlParams.get('r') == '1') {
+    await database.ref(`data/`).update({
+        onlyNumbers: 0,
+        onlyUpper: 0,
+        onlyLower: 0,
+        noSpecial: 0,
+        noNumbers: 0,
+        noUpper: 0,
+        noLower: 0,
+        total: 0,
+        repeating: 0,
+        common: 0,
+    })
+    window.location = '/'
+}
