@@ -87,6 +87,7 @@ database.ref('data/').on('value', async snapshot => {
   console.log(avgLen)
   document.querySelector('#avglen').innerHTML = avgLen
   document.querySelector('#avgscore').innerHTML = avgScore
+  document.querySelector('#sessions').innerHTML = data['sessions']
   document.querySelector('#emails-sent').innerHTML = data['emailed']
   document.querySelector('#update-ts').innerHTML = new Date()
 })
@@ -103,7 +104,8 @@ document.querySelector('#reset-datapage').addEventListener('click', async () => 
       total: 0,
       repeating: 0,
       common: 0,
-      emailed: 0
+      emailed: 0,
+      sessions: 0
   })
   await database.ref(`submissions/`).remove()
   }

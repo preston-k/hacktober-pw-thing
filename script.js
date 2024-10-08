@@ -26,6 +26,9 @@ await database.ref('data/').once('value').then((snapshot) => {
     console.log(snapshot.val())
     current = snapshot.val()
 })
+database.ref(`/data/`).update({
+    sessions: current['sessions']+1
+})
 let goodList = ''
 let badList = ''
 function evaluate(pw) {
@@ -199,7 +202,8 @@ if (urlParams.get('r') == '1') {
         total: 0,
         repeating: 0,
         common: 0,
-        emailed: 0
+        emailed: 0,
+        sessions: 0
     })
     window.location = '/'
 }
